@@ -2,13 +2,15 @@ export interface UserProps {
   name: string;
   email: string;
   password: string;
+  id?: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export class User {
-  private _id: string;
   private props: UserProps;
-  private _createdAt: string;
-  private _updatedAt: string;
+
   constructor(props: UserProps) {
     this.props = {
       ...props,
@@ -16,7 +18,7 @@ export class User {
   }
 
   public get id() {
-    return this._id;
+    return this.props.id;
   }
 
   public set name(name: string) {
@@ -42,11 +44,15 @@ export class User {
   public get password(): string {
     return this.props.password;
   }
-  public get createdAt(): string {
-    return this._createdAt;
+  public get createdAt(): Date {
+    return this.props.createdAt;
   }
 
-  public get updatedAt(): string {
-    return this._createdAt;
+  public get updatedAt(): Date | undefined {
+    return this.props.updatedAt;
+  }
+
+  public get deletedAt(): Date | undefined | null {
+    return this.props.deletedAt;
   }
 }

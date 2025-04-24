@@ -1,4 +1,5 @@
-import type { User } from "@application/entities/user";
+import { User } from "@application/user/entities/user";
+import { User as UserRaw } from "@prisma/client";
 
 export class PrismaUserMapper {
   static toPrisma(user: User) {

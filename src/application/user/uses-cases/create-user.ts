@@ -18,10 +18,17 @@ export class CreateUser {
   async execute(request: CreateUserRequest): Promise<CreateUserResponse> {
     const { email, name, password } = request;
 
+    const usersExists = await this.usersRepository.findByEmail(email);
+
+    if (usersExists) {
+      throw new Error("Usuário com esse mail já existe.");
+    }
+
     const user = new User({
       email,
       name,
       password,
+      createdAt: new Date(),
     });
 
     await this.usersRepository.create(user);
