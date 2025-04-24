@@ -7,7 +7,8 @@ export interface UserProps {
 export class User {
   private _id: string;
   private props: UserProps;
-
+  private _createdAt: string;
+  private _updatedAt: string;
   constructor(props: UserProps) {
     this.props = {
       ...props,
@@ -40,5 +41,12 @@ export class User {
 
   public get password(): string {
     return this.props.password;
+  }
+  public get createdAt(): string {
+    return this._createdAt;
+  }
+
+  public get updatedAt(): string {
+    return this._createdAt;
   }
 }

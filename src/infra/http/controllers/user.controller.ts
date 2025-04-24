@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import type { CreateUserBody } from "../dtos/create-user-body";
 import { CreateUser } from "@application/uses-cases/create-user";
+import { UserViewModel } from "../view-models/user-view-model";
 
 @Controller("users")
 export class UserController {
@@ -16,6 +17,6 @@ export class UserController {
       password,
     });
 
-    return { user };
+    return { user: UserViewModel.toHTTP(user) };
   }
 }
