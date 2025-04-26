@@ -18,10 +18,10 @@ export class CreateUserCase {
   async execute(request: CreateUserRequest): Promise<CreateUserResponse> {
     const { email, name, password } = request;
 
-    const usersExists = await this.usersRepository.findByEmail(email);
+    const userExists = await this.usersRepository.findByEmail(email);
 
-    if (usersExists) {
-      throw new Error("Usuário com esse mail já existe.");
+    if (userExists) {
+      throw new Error("Usuário com esse e-mail já existe.");
     }
 
     const user = new User({
