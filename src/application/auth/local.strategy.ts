@@ -1,11 +1,11 @@
-import { ValidateSession } from "@application/user/uses-cases/validate-session";
+import { ValidateSessionCase } from "@application/auth/use-cases/validate-session";
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private sessionsUser: ValidateSession) {
+  constructor(private sessionsUser: ValidateSessionCase) {
     super({
       usernameField: "email",
     });

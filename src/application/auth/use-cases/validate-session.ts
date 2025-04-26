@@ -8,7 +8,7 @@ interface SessionsProps {
 }
 
 @Injectable()
-export class ValidateSession {
+export class ValidateSessionCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute(request: SessionsProps) {

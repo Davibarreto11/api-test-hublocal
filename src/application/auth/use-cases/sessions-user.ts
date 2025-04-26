@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { User } from "../entities/user";
+import type { User } from "@application/user/entities/user";
 import { JwtService } from "@nestjs/jwt";
 
 export interface userPayload {
@@ -13,7 +13,7 @@ interface SessionUserRequest {
 }
 
 @Injectable()
-export class SessionsUser {
+export class SessionsUserCase {
   constructor(private jwtService: JwtService) {}
 
   async execute({ user }: SessionUserRequest) {

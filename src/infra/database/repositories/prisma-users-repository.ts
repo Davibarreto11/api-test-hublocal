@@ -38,4 +38,73 @@ export class PrismaUsersRepository implements UsersRepository {
       deletedAt: user.deletedAt,
     });
   }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return new User({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.passwordHash,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      deletedAt: user.deletedAt,
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prismaService.user.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async update({ id, name, email, password }: Partial<User>): Promise<User> {
+    let passwordHash = password;
+
+    if (passwordHash) {
+      passwordHash = await hash(passwordHash, 7);
+    }
+
+    const user = await this.prismaService.user.update({
+      where: { id },
+      data: { email, name, passwordHash },
+    });
+
+    return new User({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.passwordHash,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      deletedAt: user.deletedAt,
+    });
+  }
+
+  async findManyUsers(): Promise<User[]> {
+    const users = await this.prismaService.user.findMany();
+    return users.map(
+      (user) =>
+        new User({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          password: user.passwordHash,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          deletedAt: user.deletedAt,
+        })
+    );
+  }
 }

@@ -1,13 +1,17 @@
-import { Module, type MiddlewareConsumer } from "@nestjs/common";
+import { Module, MiddlewareConsumer } from "@nestjs/common";
 import { UserController } from "./controllers/user.controller";
-import { CreateUser } from "@application/user/uses-cases/create-user";
+import { CreateUserCase } from "@application/user/uses-cases/create-user";
 import { DatabaseModule } from "../database/database.module";
-import { ValidateSession } from "@application/user/uses-cases/validate-session";
+import { ValidateSessionCase } from "@application/auth/use-cases/validate-session";
 import { LocalStrategy } from "@application/auth/local.strategy";
 import { SessionDTOMiddleware } from "@application/auth/middleware/SessionDTO";
-import { SessionsUser } from "@application/user/uses-cases/sessions-user";
+import { SessionsUserCase } from "@application/auth/use-cases/sessions-user";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "@application/auth/jwt.stategy";
+import { GetManyUsers } from "@application/user/uses-cases/get-many-users";
+import { GetUserUseCase } from "@application/user/uses-cases/get-user";
+import { UpdateUserCase } from "@application/user/uses-cases/update-user";
+import { DeleteUserCase } from "@application/user/uses-cases/delete-user";
 
 @Module({
   imports: [
@@ -19,10 +23,14 @@ import { JwtStrategy } from "@application/auth/jwt.stategy";
   ],
   controllers: [UserController],
   providers: [
-    CreateUser,
-    ValidateSession,
+    CreateUserCase,
+    SessionsUserCase,
+    GetManyUsers,
+    GetUserUseCase,
+    UpdateUserCase,
+    DeleteUserCase,
+    ValidateSessionCase,
     LocalStrategy,
-    SessionsUser,
     JwtStrategy,
   ],
 })
