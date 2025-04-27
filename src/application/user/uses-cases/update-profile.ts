@@ -18,7 +18,7 @@ interface UpdateUserResponse {
 }
 
 @Injectable()
-export class UpdateUserCase {
+export class UpdateProfileCase {
   constructor(private usersRepository: UsersRepository) {}
   async execute(request: UpdateUserRequest): Promise<UpdateUserResponse> {
     const { id, name, email, password } = request;

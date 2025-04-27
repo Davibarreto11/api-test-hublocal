@@ -22,8 +22,14 @@ import {
   DeleteUserCase,
   GetManyUsersCase,
   GetUserUseCase,
-  UpdateUserCase,
+  UpdateProfileCase,
 } from "@application/user/uses-cases";
+
+interface Request {
+  user: {
+    userId: string;
+  };
+}
 
 @Controller("users")
 export class UserController {
@@ -33,7 +39,7 @@ export class UserController {
     private getUser: GetUserUseCase,
     private deleteUser: DeleteUserCase,
     private getManyUsers: GetManyUsersCase,
-    private updateUser: UpdateUserCase
+    private updateUser: UpdateProfileCase
   ) {}
 
   @Post("session")
@@ -69,9 +75,11 @@ export class UserController {
     return users.map((user) => UserViewModel.toHTTP(user));
   }
 
-  @Put("/:id")
-  async update(@Param("id") id: string, @Body() body: UpdateUserBody) {
+  @Put()
+  async update(@Request() request: Request, @Body() body: UpdateUserBody) {
     const { email, name, password } = body;
+
+    const id = request.user.userId;
 
     const { user } = await this.updateUser.execute({
       id,

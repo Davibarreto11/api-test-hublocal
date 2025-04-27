@@ -24,7 +24,7 @@ import {
   DeleteUserCase,
   GetManyUsersCase,
   GetUserUseCase,
-  UpdateUserCase,
+  UpdateProfileCase,
 } from "@application/user/uses-cases";
 import {
   CreateCompanyCase,
@@ -48,7 +48,7 @@ import {
     CreateUserCase,
     GetManyUsersCase,
     GetUserUseCase,
-    UpdateUserCase,
+    UpdateProfileCase,
     DeleteUserCase,
     CreateCompanyCase,
     GetCompanyUseCase,
