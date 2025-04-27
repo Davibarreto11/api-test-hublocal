@@ -21,7 +21,7 @@ import {
   CreateUserCase,
   DeleteUserCase,
   GetManyUsersCase,
-  GetUserUseCase,
+  GetProfileUseCase,
   UpdateProfileCase,
 } from "@application/user/uses-cases";
 
@@ -36,7 +36,7 @@ export class UserController {
   constructor(
     private createUser: CreateUserCase,
     private sessionUser: SessionsUserCase,
-    private getUser: GetUserUseCase,
+    private getUser: GetProfileUseCase,
     private deleteUser: DeleteUserCase,
     private getManyUsers: GetManyUsersCase,
     private updateUser: UpdateProfileCase
@@ -91,8 +91,10 @@ export class UserController {
     return { user: UserViewModel.toHTTP(user) };
   }
 
-  @Patch("/:id")
-  async get(@Param("id") id: string) {
+  @Patch()
+  async get(@Request() request: Request) {
+    const id = request.user.userId;
+
     const user = await this.getUser.execute(id);
 
     return { user: UserViewModel.toHTTP(user) };

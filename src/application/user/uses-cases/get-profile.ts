@@ -3,7 +3,7 @@ import { UsersRepository } from "../repositories/users-repository";
 import type { User } from "../entities/user";
 
 @Injectable()
-export class GetUserUseCase {
+export class GetProfileUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute(id: string): Promise<User> {
