@@ -12,17 +12,18 @@ import {
   Request,
   UseGuards,
 } from "@nestjs/common";
-import { CreateUserBody } from "../dtos/create-user-body";
-import { CreateUserCase } from "@application/user/uses-cases/create-user";
 import { UserViewModel } from "../view-models/user-view-model";
 import { SessionsUserCase } from "@application/auth/use-cases/sessions-user";
 import { LocalAuthGuard } from "@application/auth/guards/local-guards";
 import { Public } from "@application/auth/decorators/is-public";
-import { GetUserUseCase } from "@application/user/uses-cases/get-user";
-import { DeleteUserCase } from "@application/user/uses-cases/delete-user";
-import { GetManyUsers } from "@application/user/uses-cases/get-many-users";
-import { UpdateUserCase } from "@application/user/uses-cases/update-user";
-import { UpdateUserBody } from "../dtos/update-user-body";
+import { UpdateUserBody, CreateUserBody } from "../dtos";
+import {
+  CreateUserCase,
+  DeleteUserCase,
+  GetManyUsersCase,
+  GetUserUseCase,
+  UpdateUserCase,
+} from "@application/user/uses-cases";
 
 @Controller("users")
 export class UserController {
@@ -31,7 +32,7 @@ export class UserController {
     private sessionUser: SessionsUserCase,
     private getUser: GetUserUseCase,
     private deleteUser: DeleteUserCase,
-    private getManyUsers: GetManyUsers,
+    private getManyUsers: GetManyUsersCase,
     private updateUser: UpdateUserCase
   ) {}
 
@@ -65,7 +66,7 @@ export class UserController {
   async getAll() {
     const users = await this.getManyUsers.execute();
 
-    return users;
+    return users.map((user) => UserViewModel.toHTTP(user));
   }
 
   @Put("/:id")

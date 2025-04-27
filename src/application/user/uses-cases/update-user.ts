@@ -25,11 +25,12 @@ export class UpdateUserCase {
 
     const emailExists = await this.usersRepository.findByEmail(email);
 
-    if (emailExists) throw new BadRequestException();
+    if (emailExists)
+      throw new BadRequestException("E-mail já existe no sistema");
 
     const user = await this.usersRepository.findById(id);
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException("Usuário não encontrado.");
 
     const newUser = await this.usersRepository.update({
       id,

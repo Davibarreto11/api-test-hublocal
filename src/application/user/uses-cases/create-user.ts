@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { User } from "../entities/user";
 import { UsersRepository } from "../repositories/users-repository";
 
@@ -21,7 +21,7 @@ export class CreateUserCase {
     const userExists = await this.usersRepository.findByEmail(email);
 
     if (userExists) {
-      throw new Error("Usuário com esse e-mail já existe.");
+      throw new BadRequestException("Usuário já existe no sistema.");
     }
 
     const user = new User({

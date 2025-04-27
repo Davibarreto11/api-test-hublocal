@@ -1,3 +1,4 @@
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Company } from "../entities/company";
 import { CompaniesRepository } from "../repositories/companies-repository";
 
@@ -12,16 +13,16 @@ interface CreateUserResponse {
   company: Company;
 }
 
+@Injectable()
 export class CreateCompanyCase {
   constructor(private companiesRepository: CompaniesRepository) {}
-
   async execute(request: CreateCompanyRequest): Promise<CreateUserResponse> {
     const { cnpj, name, url, userId } = request;
 
     const companyExists = await this.companiesRepository.findByCNPJ(cnpj);
 
     if (companyExists) {
-      throw new Error("CNPJ já cadastrado no sistema.");
+      throw new BadRequestException("CNPJ já cadastrado no sistema.");
     }
 
     const company = new Company({

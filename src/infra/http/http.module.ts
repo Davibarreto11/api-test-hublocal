@@ -8,10 +8,16 @@ import { SessionDTOMiddleware } from "@application/auth/middleware/SessionDTO";
 import { SessionsUserCase } from "@application/auth/use-cases/sessions-user";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "@application/auth/jwt.stategy";
-import { GetManyUsers } from "@application/user/uses-cases/get-many-users";
+import { GetManyUsersCase } from "@application/user/uses-cases/get-many-users";
 import { GetUserUseCase } from "@application/user/uses-cases/get-user";
 import { UpdateUserCase } from "@application/user/uses-cases/update-user";
 import { DeleteUserCase } from "@application/user/uses-cases/delete-user";
+import { CompanyController } from "./controllers/company.controller";
+import { CreateCompanyCase } from "@application/company/uses-cases/create-company";
+import { GetCompanyUseCase } from "@application/company/uses-cases/get-company";
+import { GetManyCompaniesCase } from "@application/company/uses-cases/get-many-companies";
+import { DeleteCompanyCase } from "@application/company/uses-cases/delete-company";
+import { UpdateCompanyCase } from "@application/company/uses-cases/update-company";
 
 @Module({
   imports: [
@@ -21,14 +27,19 @@ import { DeleteUserCase } from "@application/user/uses-cases/delete-user";
       signOptions: { expiresIn: process.env.JWT_EXPIRES },
     }),
   ],
-  controllers: [UserController],
+  controllers: [UserController, CompanyController],
   providers: [
     CreateUserCase,
     SessionsUserCase,
-    GetManyUsers,
+    GetManyUsersCase,
     GetUserUseCase,
     UpdateUserCase,
     DeleteUserCase,
+    CreateCompanyCase,
+    GetCompanyUseCase,
+    GetManyCompaniesCase,
+    DeleteCompanyCase,
+    UpdateCompanyCase,
     ValidateSessionCase,
     LocalStrategy,
     JwtStrategy,
