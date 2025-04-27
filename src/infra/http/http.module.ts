@@ -1,23 +1,38 @@
 import { Module, MiddlewareConsumer } from "@nestjs/common";
-import { UserController } from "./controllers/user.controller";
-import { CreateUserCase } from "@application/user/uses-cases/create-user";
 import { DatabaseModule } from "../database/database.module";
 import { ValidateSessionCase } from "@application/auth/use-cases/validate-session";
 import { LocalStrategy } from "@application/auth/local.strategy";
 import { SessionDTOMiddleware } from "@application/auth/middleware/SessionDTO";
-import { SessionsUserCase } from "@application/auth/use-cases/sessions-user";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "@application/auth/jwt.stategy";
-import { GetManyUsersCase } from "@application/user/uses-cases/get-many-users";
-import { GetUserUseCase } from "@application/user/uses-cases/get-user";
-import { UpdateUserCase } from "@application/user/uses-cases/update-user";
-import { DeleteUserCase } from "@application/user/uses-cases/delete-user";
+
+import { UserController } from "./controllers/user.controller";
 import { CompanyController } from "./controllers/company.controller";
-import { CreateCompanyCase } from "@application/company/uses-cases/create-company";
-import { GetCompanyUseCase } from "@application/company/uses-cases/get-company";
-import { GetManyCompaniesCase } from "@application/company/uses-cases/get-many-companies";
-import { DeleteCompanyCase } from "@application/company/uses-cases/delete-company";
-import { UpdateCompanyCase } from "@application/company/uses-cases/update-company";
+import { LocationController } from "./controllers/location.controller";
+
+import { SessionsUserCase } from "@application/auth/use-cases/sessions-user";
+import {
+  CreateLocationCase,
+  DeleteLocationCase,
+  GetLocationUseCase,
+  GetManyLocationByCompanyIdCase,
+  UpdateLocationCase,
+} from "@application/location/uses-cases";
+
+import {
+  CreateUserCase,
+  DeleteUserCase,
+  GetManyUsersCase,
+  GetUserUseCase,
+  UpdateUserCase,
+} from "@application/user/uses-cases";
+import {
+  CreateCompanyCase,
+  DeleteCompanyCase,
+  GetCompanyUseCase,
+  GetManyCompaniesCase,
+  UpdateCompanyCase,
+} from "@application/company/uses-cases";
 
 @Module({
   imports: [
@@ -27,10 +42,10 @@ import { UpdateCompanyCase } from "@application/company/uses-cases/update-compan
       signOptions: { expiresIn: process.env.JWT_EXPIRES },
     }),
   ],
-  controllers: [UserController, CompanyController],
+  controllers: [UserController, CompanyController, LocationController],
   providers: [
-    CreateUserCase,
     SessionsUserCase,
+    CreateUserCase,
     GetManyUsersCase,
     GetUserUseCase,
     UpdateUserCase,
@@ -40,6 +55,11 @@ import { UpdateCompanyCase } from "@application/company/uses-cases/update-compan
     GetManyCompaniesCase,
     DeleteCompanyCase,
     UpdateCompanyCase,
+    CreateLocationCase,
+    DeleteLocationCase,
+    GetLocationUseCase,
+    GetManyLocationByCompanyIdCase,
+    UpdateLocationCase,
     ValidateSessionCase,
     LocalStrategy,
     JwtStrategy,

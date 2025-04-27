@@ -5,7 +5,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 export class DeleteUserCase {
   constructor(private usersRepository: UsersRepository) {}
 
-  async execute(id: string) {
+  async execute(id: string): Promise<void> {
     const user = await this.usersRepository.findById(id);
 
     if (!user) throw new NotFoundException("Usuário não encontrado.");

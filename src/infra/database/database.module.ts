@@ -1,9 +1,11 @@
 import { Module } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
-import { UsersRepository } from "@application/user/repositories/users-repository";
 import { PrismaUsersRepository } from "./repositories/prisma-users-repository";
-import { CompaniesRepository } from "@application/company/repositories/companies-repository";
 import { PrismaCompaniesRepository } from "./repositories/prisma-companies-repository";
+import { PrismaLocationsRepository } from "./repositories/prisma-location-repository";
+import { CompaniesRepository } from "@application/company/repositories/companies-repository";
+import { UsersRepository } from "@application/user/repositories/users-repository";
+import { LocationsRepository } from "@application/location/repositories/locations-repository";
 
 @Module({
   imports: [],
@@ -17,7 +19,11 @@ import { PrismaCompaniesRepository } from "./repositories/prisma-companies-repos
       provide: CompaniesRepository,
       useClass: PrismaCompaniesRepository,
     },
+    {
+      provide: LocationsRepository,
+      useClass: PrismaLocationsRepository,
+    },
   ],
-  exports: [UsersRepository, CompaniesRepository],
+  exports: [UsersRepository, CompaniesRepository, LocationsRepository],
 })
 export class DatabaseModule {}
