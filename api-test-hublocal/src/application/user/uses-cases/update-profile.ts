@@ -23,7 +23,7 @@ export class UpdateProfileCase {
   async execute(request: UpdateUserRequest): Promise<UpdateUserResponse> {
     const { id, name, email, password } = request;
 
-    const emailExists = await this.usersRepository.findByEmail(email);
+    const emailExists = await this.usersRepository.findByEmail(email, id);
 
     if (emailExists)
       throw new BadRequestException("E-mail já existe no sistema");
