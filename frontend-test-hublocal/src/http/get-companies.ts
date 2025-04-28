@@ -5,6 +5,7 @@ interface Company {
   name: string;
   cnpj: string;
   url: string;
+  _count: number;
   createdAt: Date;
   updatedAt: Date;
 }
