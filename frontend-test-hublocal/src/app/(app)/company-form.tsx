@@ -14,7 +14,7 @@ export const companySchema = z.object({
   url: z.string().min(6, "A senha deve ter pelo menos 6 caracteres."),
 });
 
-export type SignUpSchema = z.infer<typeof companySchema>;
+export type CompanySchema = z.infer<typeof companySchema>;
 
 interface CompanyFormProps {
   companyId?: string;
@@ -49,7 +49,7 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
     }
   }, [companyId, company, resetForm]);
 
-  const onSubmit = useCallback((data: SignUpSchema) => {
+  const onSubmit = useCallback((data: CompanySchema) => {
     try {
       if (companyId) {
         updateCompany({
