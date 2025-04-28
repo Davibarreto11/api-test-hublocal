@@ -2,15 +2,17 @@ import { create } from "zustand";
 import { getCompanies } from "@/http/get-companies";
 import { removeCompany } from "@/http/remove-company";
 import { getCompany } from "@/http/get-company";
+import { createCompany } from "@/http/create-company";
+import { updateCompany } from "@/http/update-company";
 
 interface Company {
-  id: string;
+  id?: string;
   name: string;
   cnpj: string;
   url: string;
   _count?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface CompaniesStore {
@@ -21,6 +23,8 @@ interface CompaniesStore {
   getCompanies: () => Promise<void>;
   removeCompany: (id: string) => Promise<void>;
   getCompany: (id: string) => Promise<void>;
+  createCompany: (company: Company) => Promise<void>;
+  updateCompany: (company: Company) => Promise<void>;
   reset: () => void;
 }
 
@@ -29,6 +33,31 @@ export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
   error: null,
   companies: [],
   company: null,
+
+  createCompany: async ({ cnpj, name, url }: Company) => {
+    set({ loading: true });
+    try {
+      await createCompany({ cnpj, name, url });
+      await get().getCompanies();
+    } catch (error) {
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  updateCompany: async ({ cnpj, name, url, id }: Company) => {
+    set({ loading: true });
+    try {
+      if (!id) {
+        throw new Error();
+      }
+      await updateCompany({ cnpj, name, url, id });
+      await get().getCompanies();
+    } catch (error) {
+    } finally {
+      set({ loading: false });
+    }
+  },
 
   getCompanies: async () => {
     set({ loading: true });

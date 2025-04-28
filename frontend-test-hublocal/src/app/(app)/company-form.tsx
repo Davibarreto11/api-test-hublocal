@@ -10,10 +10,7 @@ import { useCompaniesStore } from "@/store/company";
 
 export const companySchema = z.object({
   name: z.string().nonempty("Por favor, insira um nome."),
-  cnpj: z
-    .string()
-    .email("Por favor, insira um email válido.")
-    .min(1, "O email é obrigatório."),
+  cnpj: z.string().min(1, "O CNPJ é obrigatório."),
   url: z.string().min(6, "A senha deve ter pelo menos 6 caracteres."),
 });
 
@@ -21,14 +18,18 @@ export type SignUpSchema = z.infer<typeof companySchema>;
 
 interface CompanyFormProps {
   companyId?: string;
+  onClose: () => void;
 }
 
-export function CompanyForm({ companyId }: CompanyFormProps) {
-  const { getCompany, company, loading, reset } = useCompaniesStore();
+export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
+  const { getCompany, company, loading, reset, createCompany, updateCompany } =
+    useCompaniesStore();
 
   const {
     register,
     handleSubmit,
+    setValue,
+    reset: resetForm,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(companySchema),
@@ -38,22 +39,35 @@ export function CompanyForm({ companyId }: CompanyFormProps) {
     companyId ? getCompany(companyId) : reset();
   }, [companyId, getCompany]);
 
-  const onSubmit = useCallback(async (data: SignUpSchema) => {
+  useEffect(() => {
+    if (companyId && company) {
+      resetForm({
+        name: company.name,
+        cnpj: company.cnpj,
+        url: company.url,
+      });
+    }
+  }, [companyId, company, resetForm]);
+
+  const onSubmit = useCallback((data: SignUpSchema) => {
     try {
       if (companyId) {
-        // await createUser({
-        //   name: data.name,
-        //   email: data.email,
-        //   password: data.password,
-        // });
+        updateCompany({
+          id: companyId,
+          cnpj: data.cnpj,
+          name: data.name,
+          url: data.url,
+        });
         toast.success("Empresa atualizada com sucesso!");
+        onClose();
       } else {
-        // await createUser({
-        //   name: data.name,
-        //   email: data.email,
-        //   password: data.password,
-        // });
+        createCompany({
+          name: data.name,
+          cnpj: data.cnpj,
+          url: data.url,
+        });
         toast.success("Empresa criada com sucesso!");
+        onClose();
       }
     } catch (err: any) {
       toast.error(err.message);
@@ -106,7 +120,7 @@ export function CompanyForm({ companyId }: CompanyFormProps) {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end", // Alinha o botão para a direita
+          justifyContent: "flex-end",
           mt: 2,
           mb: 1,
         }}

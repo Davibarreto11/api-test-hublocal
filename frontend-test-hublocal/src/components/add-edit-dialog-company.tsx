@@ -51,7 +51,7 @@ export function AddEditDialogCompany({
         </DialogTitle>
       </Box>
       <DialogContent>
-        <CompanyForm companyId={companyId} />
+        <CompanyForm companyId={companyId} onClose={onClose} />
       </DialogContent>
     </Dialog>
   );

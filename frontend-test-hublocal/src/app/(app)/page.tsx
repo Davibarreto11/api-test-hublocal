@@ -148,12 +148,6 @@ export default function Home() {
                         <TableCell>
                           <IconButton
                             color="primary"
-                            onClick={() => handleEdit(company.id)}
-                          >
-                            <Edit fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            color="primary"
                             onClick={() =>
                               setAddEditDialog({
                                 id: company.id,
@@ -161,6 +155,12 @@ export default function Home() {
                                 open: true,
                               })
                             }
+                          >
+                            <Edit fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            color="primary"
+                            onClick={() => console.log("dadsa")}
                           >
                             <Business fontSize="small" />
                           </IconButton>
