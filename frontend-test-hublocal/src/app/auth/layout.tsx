@@ -1,22 +1,29 @@
-"use client";
-
 import Grid from "@mui/material/Grid";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import Background from "@/assets/client.png";
+import { isAuthenticated } from "@/auth/auth";
+import { redirect } from "next/navigation";
 
-export default function AuthLayout({
+// import { isAuthenticated } from "@/auth/auth";
+// import { redirect } from "next/navigation";
+
+export default async function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authenticated = await isAuthenticated();
+
+  if (authenticated) {
+    redirect("/");
+  }
+
   return (
     <Grid
       container
       sx={{
         minHeight: "100vh",
-        // justifyContent: "center",
-        // alignItems: "center",
       }}
     >
       <Grid
@@ -26,7 +33,6 @@ export default function AuthLayout({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          // justifyContent: "space-between",
           color: "white",
           textAlign: "center",
         }}
