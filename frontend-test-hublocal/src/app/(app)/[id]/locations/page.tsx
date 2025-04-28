@@ -15,12 +15,13 @@ import {
   Pagination,
   TablePagination,
 } from "@mui/material";
-import { Edit, Delete, Business, LocationOn } from "@mui/icons-material";
+import { useParams } from "next/navigation";
+
+import { Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useCompaniesStore } from "@/store/company";
-import { DeleteDialogCompany } from "@/components/delete-dialog-company";
-import { AddEditDialogCompany } from "@/components/add-edit-dialog-company";
-import { useRouter } from "next/navigation";
+import { useLocationsStore } from "@/store/location";
+import { DeleteDialogLocation } from "@/components/delete-dialog-location";
+import { AddEditDialogLocation } from "@/components/add-edit-dialog-location";
 
 interface Company {
   id: number;
@@ -28,25 +29,27 @@ interface Company {
   locations: number;
 }
 
-export default function Home() {
-  const router = useRouter();
-  const { companies, loading, getCompanies } = useCompaniesStore();
+export default function LocationsPage() {
+  const { id } = useParams();
+  const { locations, loading, getLocations } = useLocationsStore();
 
   const [deleteDialog, setDeleteDialog] = useState<{
     id: string;
+    companyId: string;
     name: string;
     open: boolean;
-  }>({ id: "", name: "", open: false });
+  }>({ id: "", companyId: id as string, name: "", open: false });
 
   const [addEditDialog, setAddEditDialog] = useState<{
     id?: string;
-    name?: string;
+    companyId?: string;
+    name: string;
     open: boolean;
-  }>({ id: "", name: "", open: false });
+  }>({ id: "", companyId: id as string, name: "", open: false });
 
   useEffect(() => {
-    getCompanies();
-  }, [getCompanies]);
+    getLocations(id as string);
+  }, [getLocations]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -62,16 +65,9 @@ export default function Home() {
     setPage(0);
   };
 
-  const handleEdit = (id: string) => {
-    alert(`Editar empresa ${id}`);
-  };
-
-  const handleLocations = (id: string) => {
-    alert(`Ver locais da empresa ${id}`);
-  };
   return (
     <Box p={2}>
-      {companies.length === 0 ? (
+      {locations.length === 0 ? (
         <Box
           display="flex"
           flexDirection="column"
@@ -81,7 +77,7 @@ export default function Home() {
           borderRadius={2}
         >
           <Typography variant="h4" fontWeight="bold" mb={2}>
-            Nenhuma empresa cadastrada!
+            Nenhuma local cadastrado!
           </Typography>
           <Button
             sx={{
@@ -90,9 +86,16 @@ export default function Home() {
             }}
             variant="contained"
             color="primary"
-            onClick={() => setAddEditDialog({ id: "", name: "", open: true })}
+            onClick={() =>
+              setAddEditDialog({
+                id: "",
+                companyId: id as string,
+                name: "",
+                open: true,
+              })
+            }
           >
-            Adicionar Empresa
+            Adicionar Local
           </Button>
         </Box>
       ) : (
@@ -105,9 +108,16 @@ export default function Home() {
               }}
               variant="contained"
               color="primary"
-              onClick={() => setAddEditDialog({ id: "", name: "", open: true })}
+              onClick={() =>
+                setAddEditDialog({
+                  id: "",
+                  companyId: id as string,
+                  name: "",
+                  open: true,
+                })
+              }
             >
-              Adicionar Empresa
+              Adicionar Local
             </Button>
           </Box>
 
@@ -121,18 +131,12 @@ export default function Home() {
                         fontWeight: "700",
                       }}
                     >
-                      <b>Empresa</b>
+                      <b>Local</b>
                     </TableCell>
                     <TableCell
                       sx={{
                         fontWeight: "700",
-                      }}
-                    >
-                      <b>Qt de Locais</b>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        fontWeight: "700",
+                        textAlign: "center",
                       }}
                     >
                       <b>Ações</b>
@@ -140,19 +144,23 @@ export default function Home() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {companies
+                  {locations
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((company) => (
-                      <TableRow key={company.id}>
-                        <TableCell>{company.name}</TableCell>
-                        <TableCell>{company._count}</TableCell>
-                        <TableCell>
+                    .map((location) => (
+                      <TableRow key={location.id}>
+                        <TableCell>{location.name}</TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
                           <IconButton
                             color="primary"
                             onClick={() =>
                               setAddEditDialog({
-                                id: company.id,
-                                name: company.name,
+                                id: location.id,
+                                companyId: location.companyId,
+                                name: location.name,
                                 open: true,
                               })
                             }
@@ -160,19 +168,12 @@ export default function Home() {
                             <Edit fontSize="small" />
                           </IconButton>
                           <IconButton
-                            color="primary"
-                            onClick={() =>
-                              router.push(`${company.id}/locations`)
-                            }
-                          >
-                            <Business fontSize="small" />
-                          </IconButton>
-                          <IconButton
                             color="error"
                             onClick={() =>
                               setDeleteDialog({
-                                id: company?.id,
-                                name: company.name,
+                                id: location?.id,
+                                companyId: location.companyId,
+                                name: location.name,
                                 open: true,
                               })
                             }
@@ -187,7 +188,7 @@ export default function Home() {
             </TableContainer>
             <TablePagination
               component="div"
-              count={companies.length}
+              count={locations.length}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}
@@ -196,30 +197,29 @@ export default function Home() {
               labelDisplayedRows={({ from, to, count }) =>
                 `${from}-${to} de ${count}`
               }
-              // getItemAriaLabel={(type) => {
-              //   if (type === "next") return "Próxima página";
-              //   if (type === "previous") return "Página anterior";
-              //   if (type === "first") return "Primeira página";
-              //   if (type === "last") return "Última página";
-              //   return "";
-              // }}
             />
           </Paper>
-          <AddEditDialogCompany
-            companyId={addEditDialog?.id}
+          <AddEditDialogLocation
+            companyId={addEditDialog?.companyId}
+            locationId={addEditDialog.id}
             title={
               addEditDialog.id
                 ? `Editar: ${addEditDialog.name}`
                 : "Adicionar Empresa"
             }
             open={addEditDialog.open}
-            onClose={() => setAddEditDialog({ id: "", name: "", open: false })}
+            onClose={() =>
+              setAddEditDialog({ id: "", companyId: "", name: "", open: false })
+            }
           />
-          <DeleteDialogCompany
+          <DeleteDialogLocation
             id={deleteDialog.id}
             name={deleteDialog.name}
+            companyId={deleteDialog.companyId}
             open={deleteDialog.open}
-            onClose={() => setDeleteDialog({ id: "", name: "", open: false })}
+            onClose={() =>
+              setDeleteDialog({ id: "", companyId: "", name: "", open: false })
+            }
           />
         </Box>
       )}
