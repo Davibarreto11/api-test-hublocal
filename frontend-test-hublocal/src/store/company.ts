@@ -6,7 +6,7 @@ import { createCompany } from "@/http/create-company";
 import { updateCompany } from "@/http/update-company";
 
 interface Company {
-  id?: string;
+  id: string;
   name: string;
   cnpj: string;
   url: string;
@@ -23,10 +23,12 @@ interface CompaniesStore {
   getCompanies: () => Promise<void>;
   removeCompany: (id: string) => Promise<void>;
   getCompany: (id: string) => Promise<void>;
-  createCompany: (company: Company) => Promise<void>;
+  createCompany: (company: CreateCompanyInput) => Promise<void>;
   updateCompany: (company: Company) => Promise<void>;
   reset: () => void;
 }
+
+type CreateCompanyInput = Omit<Company, "id"> & { id?: undefined };
 
 export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
   loading: false,
@@ -34,7 +36,7 @@ export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
   companies: [],
   company: null,
 
-  createCompany: async ({ cnpj, name, url }: Company) => {
+  createCompany: async ({ cnpj, name, url }: CreateCompanyInput) => {
     set({ loading: true });
     try {
       await createCompany({ cnpj, name, url });
@@ -48,9 +50,6 @@ export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
   updateCompany: async ({ cnpj, name, url, id }: Company) => {
     set({ loading: true });
     try {
-      if (!id) {
-        throw new Error();
-      }
       await updateCompany({ cnpj, name, url, id });
       await get().getCompanies();
     } catch (error) {
