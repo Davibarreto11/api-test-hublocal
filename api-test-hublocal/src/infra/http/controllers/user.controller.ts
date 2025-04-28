@@ -44,7 +44,6 @@ export class UserController {
 
   @Post("session")
   @Public()
-  @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   async session(@Request() request: any) {
     const token = await this.sessionUser.execute({
