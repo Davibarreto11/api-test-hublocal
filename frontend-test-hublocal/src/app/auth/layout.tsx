@@ -5,9 +5,6 @@ import Background from "@/assets/client.png";
 import { isAuthenticated } from "@/auth/auth";
 import { redirect } from "next/navigation";
 
-// import { isAuthenticated } from "@/auth/auth";
-// import { redirect } from "next/navigation";
-
 export default async function AuthLayout({
   children,
 }: Readonly<{

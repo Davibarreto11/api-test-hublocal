@@ -19,6 +19,8 @@ import {
 import { Edit, Delete, Business, LocationOn } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useCompaniesStore } from "@/store/company";
+import { DeleteDialogCompany } from "@/components/delete-dialog-company";
+import { AddEditDialogCompany } from "@/components/add-edit-dialog-company";
 
 interface Company {
   id: number;
@@ -28,6 +30,18 @@ interface Company {
 
 export default function Home() {
   const { companies, loading, getCompanies } = useCompaniesStore();
+
+  const [deleteDialog, setDeleteDialog] = useState<{
+    id: string;
+    name: string;
+    open: boolean;
+  }>({ id: "", name: "", open: false });
+
+  const [addEditDialog, setAddEditDialog] = useState<{
+    id?: string;
+    name?: string;
+    open: boolean;
+  }>({ id: "", name: "", open: false });
 
   useEffect(() => {
     getCompanies();
@@ -47,36 +61,13 @@ export default function Home() {
     setPage(0);
   };
 
-  const handleAddCompany = () => {
-    // lógica para adicionar empresa
-    alert("Adicionar Empresa");
-  };
-
   const handleEdit = (id: string) => {
     alert(`Editar empresa ${id}`);
-  };
-
-  const handleDelete = (id: string) => {
-    alert(`Deletar empresa ${id}`);
   };
 
   const handleLocations = (id: string) => {
     alert(`Ver locais da empresa ${id}`);
   };
-
-  // if (loading && !companies) {
-  //   return (
-  //     <Box
-  //       height="60vh"
-  //       display="flex"
-  //       alignItems="center"
-  //       justifyContent="center"
-  //     >
-  //       <CircularProgress />
-  //     </Box>
-  //   );
-  // }
-
   return (
     <Box p={2}>
       {companies.length === 0 ? (
@@ -98,7 +89,7 @@ export default function Home() {
             }}
             variant="contained"
             color="primary"
-            onClick={handleAddCompany}
+            onClick={() => setAddEditDialog({ id: "", name: "", open: true })}
           >
             Adicionar Empresa
           </Button>
@@ -113,7 +104,7 @@ export default function Home() {
               }}
               variant="contained"
               color="primary"
-              onClick={handleAddCompany}
+              onClick={() => setAddEditDialog({ id: "", name: "", open: true })}
             >
               Adicionar Empresa
             </Button>
@@ -153,7 +144,7 @@ export default function Home() {
                     .map((company) => (
                       <TableRow key={company.id}>
                         <TableCell>{company.name}</TableCell>
-                        {/* <TableCell>{company.locations}</TableCell> */}
+                        <TableCell>{company._count}</TableCell>
                         <TableCell>
                           <IconButton
                             color="primary"
@@ -163,13 +154,25 @@ export default function Home() {
                           </IconButton>
                           <IconButton
                             color="primary"
-                            onClick={() => handleLocations(company.id)}
+                            onClick={() =>
+                              setAddEditDialog({
+                                id: company.id,
+                                name: company.name,
+                                open: true,
+                              })
+                            }
                           >
                             <Business fontSize="small" />
                           </IconButton>
                           <IconButton
                             color="error"
-                            onClick={() => handleDelete(company.id)}
+                            onClick={() =>
+                              setDeleteDialog({
+                                id: company.id,
+                                name: company.name,
+                                open: true,
+                              })
+                            }
                           >
                             <Delete fontSize="small" />
                           </IconButton>
@@ -190,10 +193,31 @@ export default function Home() {
               labelDisplayedRows={({ from, to, count }) =>
                 `${from}-${to} de ${count}`
               }
-              nextIconButtonProps={{ title: "Próxima" }}
-              backIconButtonProps={{ title: "Anterior" }}
+              // getItemAriaLabel={(type) => {
+              //   if (type === "next") return "Próxima página";
+              //   if (type === "previous") return "Página anterior";
+              //   if (type === "first") return "Primeira página";
+              //   if (type === "last") return "Última página";
+              //   return "";
+              // }}
             />
           </Paper>
+          <AddEditDialogCompany
+            companyId={addEditDialog?.id}
+            title={
+              addEditDialog.id
+                ? `Editar: ${addEditDialog.name}`
+                : "Adicionar Empresa"
+            }
+            open={addEditDialog.open}
+            onClose={() => setAddEditDialog({ id: "", name: "", open: false })}
+          />
+          <DeleteDialogCompany
+            id={deleteDialog.id}
+            name={deleteDialog.name}
+            open={deleteDialog.open}
+            onClose={() => setDeleteDialog({ id: "", name: "", open: false })}
+          />
         </Box>
       )}
     </Box>
