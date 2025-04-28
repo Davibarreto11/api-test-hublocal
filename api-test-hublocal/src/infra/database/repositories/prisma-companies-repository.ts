@@ -16,10 +16,11 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     });
   }
 
-  async findByCNPJ(cnpj: string): Promise<Company | null> {
+  async findByCNPJ(cnpj: string, id?: string): Promise<Company | null> {
     const company = await this.prismaService.company.findUnique({
       where: {
         cnpj,
+        ...(id && { NOT: { id } }),
       },
     });
 

@@ -23,7 +23,7 @@ export class UpdateCompanyCase {
   async execute(request: UpdateCompanyRequest): Promise<UpdateCompanyResponse> {
     const { id, name, cnpj, url } = request;
 
-    const cnpjExists = await this.companiesRepository.findByCNPJ(cnpj);
+    const cnpjExists = await this.companiesRepository.findByCNPJ(cnpj, id);
 
     if (cnpjExists)
       throw new BadRequestException("CNPJ já cadastrado no sistema.");
