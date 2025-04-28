@@ -5,7 +5,7 @@ import Image from "next/image";
 import Logo from "@/assets/logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "./actions";
@@ -21,6 +21,7 @@ export const loginSchema = z.object({
 export type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -33,10 +34,19 @@ export default function LoginPage() {
 
   const onSubmit = useCallback(
     async (data: LoginSchema) => {
-      const token = await signInWithEmailAndPassword(data);
-      if (typeof token !== "string") {
-        toast.error("Falha no login. Verifique suas credenciais.");
-        return;
+      try {
+        setLoading(true);
+        const tokenOrError = await signInWithEmailAndPassword(data);
+
+        if (typeof tokenOrError !== "string") {
+          toast.error("Falha no login. Verifique suas credenciais.");
+          return;
+        }
+
+        setLoading(false);
+        router.push("/");
+      } catch (err: any) {
+        toast.error(err.message || "Erro desconhecido ao fazer login.");
       }
     },
     [router]

@@ -8,7 +8,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
-import { createUser } from "@/http/create-user";
 import { useUserStore } from "@/store/user";
 import { toast } from "react-toastify";
 
@@ -34,7 +33,7 @@ export type SignUpSchema = z.infer<typeof signUpSchema>;
 
 export default function SignUpPage() {
   const router = useRouter();
-  const { setUser } = useUserStore();
+  const { createUser, loading, reset } = useUserStore();
 
   const {
     register,
@@ -46,16 +45,21 @@ export default function SignUpPage() {
 
   const onSubmit = useCallback(
     async (data: SignUpSchema) => {
+      reset();
+
       try {
-        await createUser(data);
+        await createUser({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
         toast.success("Conta criada com sucesso!");
         router.push("/auth/sign-in");
       } catch (err: any) {
-        toast.error(`${err?.response?.data.message}`);
-        console.error(err);
+        toast.error(err.message);
       }
     },
-    [router, setUser]
+    [router, createUser, reset]
   );
 
   return (
@@ -100,6 +104,7 @@ export default function SignUpPage() {
       />
 
       <Button
+        loading={loading}
         type="submit"
         variant="contained"
         fullWidth
