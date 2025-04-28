@@ -8,6 +8,7 @@ export class CompanyViewModel {
       cnpj: company.cnpj,
       userId: company.userId,
       url: company.url,
+      _count: company.count,
       createdAt: company.createdAt,
       updateAt: company.updatedAt,
     };

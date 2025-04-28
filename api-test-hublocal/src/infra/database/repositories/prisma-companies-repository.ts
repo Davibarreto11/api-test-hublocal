@@ -95,7 +95,15 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
   }
 
   async findManyCompanies(): Promise<Company[]> {
-    const companies = await this.prismaService.company.findMany();
+    const companies = await this.prismaService.company.findMany({
+      include: {
+        _count: {
+          select: {
+            Locations: true,
+          },
+        },
+      },
+    });
     return companies.map(
       (company) =>
         new Company({
@@ -104,6 +112,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
           cnpj: company.cnpj,
           url: company.url,
           userId: company.userId,
+          _count: company._count.Locations,
           createdAt: company.createdAt,
           updatedAt: company.updatedAt,
           deletedAt: company.deletedAt,

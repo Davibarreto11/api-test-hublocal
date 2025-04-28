@@ -7,6 +7,7 @@ export interface CompanyProps {
   updatedAt?: Date;
   deletedAt?: Date | null;
   userId: string;
+  _count?: number;
 }
 
 export class Company {
@@ -16,6 +17,9 @@ export class Company {
     this.props = {
       ...props,
     };
+  }
+  public get count(): number | undefined {
+    return this.props._count;
   }
 
   public get id(): string | undefined {

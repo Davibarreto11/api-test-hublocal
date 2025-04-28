@@ -15,7 +15,6 @@ export class SessionDTOMiddleware implements NestMiddleware {
     const authInBody = new SessionUserBody();
     authInBody.email = email;
     authInBody.password = password;
-    console.log(authInBody);
     const validations = await validate(authInBody);
 
     if (validations.length) {

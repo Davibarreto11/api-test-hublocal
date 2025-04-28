@@ -74,7 +74,7 @@ export class CompanyController {
   async get(@Param("id") id: string) {
     const commpany = await this.getComany.execute(id);
 
-    return { commpany: CompanyViewModel.toHTTP(commpany) };
+    return { company: CompanyViewModel.toHTTP(commpany) };
   }
 
   @Delete("/:id")
