@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { isAuthenticated } from "@/auth/auth";
+import { getCurrentCompany, isAuthenticated } from "@/auth/auth";
 import Header from "@/components/header";
 import { getProfile } from "@/http/get-profile";
 import { Box } from "@mui/material";
@@ -16,6 +16,7 @@ export default async function AppLayout({
     redirect("/auth/sign-in");
   }
   const { user } = await getProfile();
+
   return (
     <Box
       height="100vh"

@@ -12,7 +12,9 @@ import {
 } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCompaniesStore } from "@/store/company";
+import { getCurrentCompany } from "@/auth/auth";
 
 interface Profile {
   profile: {
@@ -22,9 +24,21 @@ interface Profile {
 }
 
 export default function Header({ profile }: Profile) {
+  const { company, getCompany } = useCompaniesStore();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  // useEffect(() => {
+  //   companyId && getCompany(companyId);
+  // }, [companyId]);
+
+  // console.log(company, companyId);
+
+  const handleMenuOpenProfile = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuOpenCompanies = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -36,25 +50,64 @@ export default function Header({ profile }: Profile) {
     <AppBar
       position="static"
       color="inherit"
-      elevation={0}
-      sx={{ borderBottom: "1px solid #eee" }}
+      sx={{
+        borderBottom: "1px solid #eee",
+      }}
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Box display="flex" alignItems="center" gap={1}>
+      <Toolbar
+        style={{
+          padding: 0,
+        }}
+        sx={{
+          display: "flex",
+          width: "100vw",
+          padding: 0,
+          justifyContent: "space-between",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            padding: 2,
+            margin: 0,
+            bgcolor: "#F5F5F5",
+          }}
+        >
           <BusinessIcon fontSize="small" />
           <Typography variant="h6" fontWeight="bold">
-            Minhas Empresas
+            {company?.name || "Minhas Empresas"}
           </Typography>
+          <IconButton onClick={handleMenuOpenCompanies} size="small">
+            <ExpandMoreIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
+          </Menu>
         </Box>
 
-        <Box display="flex" alignItems="center" gap={1}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            padding: 2,
+            bgcolor: "#F5F5F5",
+          }}
+        >
           <Avatar
             alt="Usuário"
             src="/avatar.png"
             sx={{ width: 32, height: 32 }}
           />
           <Typography variant="body1">{profile.name}</Typography>
-          <IconButton onClick={handleMenuOpen} size="small">
+          <IconButton onClick={handleMenuOpenProfile} size="small">
             <ExpandMoreIcon />
           </IconButton>
           <Menu
