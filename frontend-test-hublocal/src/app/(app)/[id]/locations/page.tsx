@@ -23,12 +23,6 @@ import { useLocationsStore } from "@/store/location";
 import { DeleteDialogLocation } from "@/components/delete-dialog-location";
 import { AddEditDialogLocation } from "@/components/add-edit-dialog-location";
 
-interface Company {
-  id: number;
-  name: string;
-  locations: number;
-}
-
 export default function LocationsPage() {
   const { id } = useParams();
   const { locations, loading, getLocations } = useLocationsStore();
@@ -199,30 +193,30 @@ export default function LocationsPage() {
               }
             />
           </Paper>
-          <AddEditDialogLocation
-            companyId={addEditDialog?.companyId}
-            locationId={addEditDialog.id}
-            title={
-              addEditDialog.id
-                ? `Editar: ${addEditDialog.name}`
-                : "Adicionar Empresa"
-            }
-            open={addEditDialog.open}
-            onClose={() =>
-              setAddEditDialog({ id: "", companyId: "", name: "", open: false })
-            }
-          />
-          <DeleteDialogLocation
-            id={deleteDialog.id}
-            name={deleteDialog.name}
-            companyId={deleteDialog.companyId}
-            open={deleteDialog.open}
-            onClose={() =>
-              setDeleteDialog({ id: "", companyId: "", name: "", open: false })
-            }
-          />
         </Box>
       )}
+      <AddEditDialogLocation
+        companyId={addEditDialog?.companyId}
+        locationId={addEditDialog.id}
+        title={
+          addEditDialog.id
+            ? `Editar: ${addEditDialog.name}`
+            : "Adicionar Empresa"
+        }
+        open={addEditDialog.open}
+        onClose={() =>
+          setAddEditDialog({ id: "", companyId: "", name: "", open: false })
+        }
+      />
+      <DeleteDialogLocation
+        id={deleteDialog.id}
+        name={deleteDialog.name}
+        companyId={deleteDialog.companyId}
+        open={deleteDialog.open}
+        onClose={() =>
+          setDeleteDialog({ id: "", companyId: "", name: "", open: false })
+        }
+      />
     </Box>
   );
 }

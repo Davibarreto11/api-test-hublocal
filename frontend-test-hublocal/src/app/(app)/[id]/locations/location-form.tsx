@@ -100,55 +100,75 @@ export function LocationForm({
         error={!!errors.name}
         helperText={errors.name?.message}
       />
-      <TextField
-        label="Rua"
-        fullWidth
-        margin="normal"
-        {...register("street")}
-        error={!!errors.street}
-        helperText={errors.street?.message}
-      />
-      <TextField
-        label="CEP"
-        fullWidth
-        margin="normal"
-        {...register("cep")}
-        error={!!errors.cep}
-        helperText={errors.cep?.message}
-      />
-      <TextField
-        label="Estado"
-        fullWidth
-        margin="normal"
-        {...register("state")}
-        error={!!errors.state}
-        helperText={errors.state?.message}
-      />
-      <TextField
-        label="Bairro"
-        fullWidth
-        margin="normal"
-        {...register("neighborhood")}
-        error={!!errors.neighborhood}
-        helperText={errors.neighborhood?.message}
-      />
-      <TextField
-        label="Cidade"
-        fullWidth
-        margin="normal"
-        {...register("city")}
-        error={!!errors.city}
-        helperText={errors.city?.message}
-      />
-      <TextField
-        label="Número"
-        fullWidth
-        margin="normal"
-        {...register("number")}
-        error={!!errors.number}
-        helperText={errors.number?.message}
-      />
-
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+        }}
+      >
+        <TextField
+          label="Rua"
+          fullWidth
+          margin="normal"
+          {...register("street")}
+          error={!!errors.street}
+          helperText={errors.street?.message}
+        />
+        <TextField
+          label="CEP"
+          fullWidth
+          margin="normal"
+          {...register("cep")}
+          error={!!errors.cep}
+          helperText={errors.cep?.message}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+        }}
+      >
+        <TextField
+          label="Estado"
+          fullWidth
+          margin="normal"
+          {...register("state")}
+          error={!!errors.state}
+          helperText={errors.state?.message}
+        />
+        <TextField
+          label="Bairro"
+          fullWidth
+          margin="normal"
+          {...register("neighborhood")}
+          error={!!errors.neighborhood}
+          helperText={errors.neighborhood?.message}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+        }}
+      >
+        <TextField
+          label="Cidade"
+          fullWidth
+          margin="normal"
+          {...register("city")}
+          error={!!errors.city}
+          helperText={errors.city?.message}
+        />
+        <TextField
+          label="Número"
+          fullWidth
+          margin="normal"
+          {...register("number")}
+          error={!!errors.number}
+          helperText={errors.number?.message}
+        />
+      </Box>
       <hr style={{ marginTop: 60 }} />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2, mb: 1 }}>

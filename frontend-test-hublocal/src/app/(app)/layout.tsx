@@ -3,13 +3,12 @@ import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/auth/auth";
 import Header from "@/components/header";
 import { getProfile } from "@/http/get-profile";
+import { Box } from "@mui/material";
 
 export default async function AppLayout({
   children,
-}: // sheet,
-Readonly<{
+}: Readonly<{
   children: React.ReactNode;
-  // sheet: React.ReactNode
 }>) {
   const authenticated = await isAuthenticated();
 
@@ -18,10 +17,14 @@ Readonly<{
   }
   const { user } = await getProfile();
   return (
-    <div className="flex flex-col px-10">
+    <Box
+      height="100vh"
+      sx={{
+        bgcolor: "#F5F5F5",
+      }}
+    >
       <Header profile={user} />
       {children}
-      {/* {sheet} */}
-    </div>
+    </Box>
   );
 }

@@ -62,13 +62,6 @@ export default function Home() {
     setPage(0);
   };
 
-  const handleEdit = (id: string) => {
-    alert(`Editar empresa ${id}`);
-  };
-
-  const handleLocations = (id: string) => {
-    alert(`Ver locais da empresa ${id}`);
-  };
   return (
     <Box p={2}>
       {companies.length === 0 ? (
@@ -205,24 +198,24 @@ export default function Home() {
               // }}
             />
           </Paper>
-          <AddEditDialogCompany
-            companyId={addEditDialog?.id}
-            title={
-              addEditDialog.id
-                ? `Editar: ${addEditDialog.name}`
-                : "Adicionar Empresa"
-            }
-            open={addEditDialog.open}
-            onClose={() => setAddEditDialog({ id: "", name: "", open: false })}
-          />
-          <DeleteDialogCompany
-            id={deleteDialog.id}
-            name={deleteDialog.name}
-            open={deleteDialog.open}
-            onClose={() => setDeleteDialog({ id: "", name: "", open: false })}
-          />
         </Box>
       )}
+      <AddEditDialogCompany
+        companyId={addEditDialog?.id}
+        title={
+          addEditDialog.id
+            ? `Editar: ${addEditDialog.name}`
+            : "Adicionar Empresa"
+        }
+        open={addEditDialog.open}
+        onClose={() => setAddEditDialog({ id: "", name: "", open: false })}
+      />
+      <DeleteDialogCompany
+        id={deleteDialog.id}
+        name={deleteDialog.name}
+        open={deleteDialog.open}
+        onClose={() => setDeleteDialog({ id: "", name: "", open: false })}
+      />
     </Box>
   );
 }
