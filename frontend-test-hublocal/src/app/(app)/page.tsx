@@ -30,7 +30,8 @@ interface Company {
 
 export default function Home() {
   const router = useRouter();
-  const { companies, loading, getCompanies } = useCompaniesStore();
+  const { companies, loading, getCompanies, getCompany, reset } =
+    useCompaniesStore();
 
   const [deleteDialog, setDeleteDialog] = useState<{
     id: string;
@@ -45,6 +46,7 @@ export default function Home() {
   }>({ id: "", name: "", open: false });
 
   useEffect(() => {
+    reset();
     getCompanies();
   }, [getCompanies]);
 
@@ -154,9 +156,10 @@ export default function Home() {
                           </IconButton>
                           <IconButton
                             color="primary"
-                            onClick={() =>
-                              router.push(`${company.id}/locations`)
-                            }
+                            onClick={() => {
+                              getCompany(company.id);
+                              router.push(`${company.id}/locations`);
+                            }}
                           >
                             <Business fontSize="small" />
                           </IconButton>

@@ -14,7 +14,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import { useCompaniesStore } from "@/store/company";
-import { getCurrentCompany } from "@/auth/auth";
+import Link from "next/link";
 
 interface Profile {
   profile: {
@@ -24,26 +24,30 @@ interface Profile {
 }
 
 export default function Header({ profile }: Profile) {
-  const { company, getCompany } = useCompaniesStore();
+  const {
+    company: companyStore,
+    getCompany,
+    getCompanies,
+    companies,
+  } = useCompaniesStore();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorE2, setAnchorE2] = useState<null | HTMLElement>(null);
 
-  // useEffect(() => {
-  //   companyId && getCompany(companyId);
-  // }, [companyId]);
-
-  // console.log(company, companyId);
+  useEffect(() => {
+    getCompanies();
+  }, []);
 
   const handleMenuOpenProfile = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuOpenCompanies = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorE2(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorE2(null);
   };
 
   return (
@@ -77,18 +81,43 @@ export default function Header({ profile }: Profile) {
         >
           <BusinessIcon fontSize="small" />
           <Typography variant="h6" fontWeight="bold">
-            {company?.name || "Minhas Empresas"}
+            {companyStore?.name || "Minhas Empresas"}
           </Typography>
           <IconButton onClick={handleMenuOpenCompanies} size="small">
             <ExpandMoreIcon />
           </IconButton>
           <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
+            anchorEl={anchorE2}
+            open={Boolean(anchorE2)}
             onClose={handleMenuClose}
+            sx={{
+              mt: 1,
+              minWidth: 200,
+              boxShadow: 3,
+              borderRadius: 2,
+            }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
           >
-            <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
+            {companies.map((company) => (
+              <Link key={company.id} href={`/${company.id}/locations`}>
+                <MenuItem
+                  sx={{
+                    fontWeight:
+                      company.id === companyStore?.id ? "bold" : "normal",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                  onClick={() => {
+                    getCompany(company.id);
+                    handleMenuClose();
+                  }}
+                >
+                  {company.name}
+                </MenuItem>
+              </Link>
+            ))}
           </Menu>
         </Box>
 
@@ -110,14 +139,16 @@ export default function Header({ profile }: Profile) {
           <IconButton onClick={handleMenuOpenProfile} size="small">
             <ExpandMoreIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
+          {/* <Menu
+            anchorEl={anchorE1}
+            open={Boolean(anchorE1)}
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
-          </Menu>
+            <a href="/api/auth/sign-out">
+              <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
+            </a>
+          </Menu> */}
         </Box>
       </Toolbar>
     </AppBar>

@@ -78,7 +78,6 @@ export function LocationForm({
           await updateLocation({ id: locationId, companyId, ...data });
           toast.success("Local atualizado com sucesso!");
         } else if (companyId) {
-          console.log();
           await createLocation({ companyId: String(companyId), ...data });
           toast.success("Local criado com sucesso!");
         }
