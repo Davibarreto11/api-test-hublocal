@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useLocationsStore } from "@/store/location";
+import { formatCEP } from "@/utils/format-cep";
 
 export const locationSchema = z.object({
   name: z.string().nonempty("O nome é obrigatório."),
@@ -61,7 +62,7 @@ export function LocationForm({
     if (locationId && location) {
       resetForm({
         name: location.name,
-        cep: location.cep,
+        cep: formatCEP(location.cep),
         state: location.state,
         neighborhood: location.neighborhood,
         street: location.street,
@@ -71,14 +72,52 @@ export function LocationForm({
     }
   }, [locationId, location, resetForm, setValue]);
 
+  const handleFormatInput = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      formatFunction: (value: string) => string
+    ) => {
+      e.target.value = formatFunction(e.target.value);
+    },
+    []
+  );
+
   const onSubmit = useCallback(
-    async (data: LocationSchema) => {
+    async ({
+      cep,
+      city,
+      name,
+      neighborhood,
+      number,
+      state,
+      street,
+    }: LocationSchema) => {
       try {
         if (locationId && companyId) {
-          await updateLocation({ id: locationId, companyId, ...data });
+          await updateLocation({
+            id: locationId,
+            companyId,
+            cep: cep.replace(/\D/g, ""),
+            city,
+            name,
+            neighborhood,
+            number,
+            state,
+            street,
+          });
           toast.success("Local atualizado com sucesso!");
         } else if (companyId) {
-          await createLocation({ companyId: String(companyId), ...data });
+          console.log();
+          await createLocation({
+            companyId: String(companyId),
+            cep: cep.replace(/\D/g, ""),
+            city,
+            name,
+            neighborhood,
+            number,
+            state,
+            street,
+          });
           toast.success("Local criado com sucesso!");
         }
         onClose();
@@ -117,7 +156,9 @@ export function LocationForm({
           label="CEP"
           fullWidth
           margin="normal"
-          {...register("cep")}
+          {...register("cep", {
+            onChange: (e) => handleFormatInput(e, formatCEP),
+          })}
           error={!!errors.cep}
           helperText={errors.cep?.message}
         />

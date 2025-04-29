@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useCompaniesStore } from "@/store/company";
+import { formatCNPJ } from "../../utils/format-cnpj";
 
 export const companySchema = z.object({
   name: z.string().nonempty("Por favor, insira um nome."),
@@ -39,11 +40,21 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
     companyId ? getCompany(companyId) : reset();
   }, [companyId, getCompany]);
 
+  const handleFormatInput = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      formatFunction: (value: string) => string
+    ) => {
+      e.target.value = formatFunction(e.target.value);
+    },
+    []
+  );
+
   useEffect(() => {
     if (companyId && company) {
       resetForm({
         name: company.name,
-        cnpj: company.cnpj,
+        cnpj: formatCNPJ(company.cnpj),
         url: company.url,
       });
     }
@@ -55,7 +66,7 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
         if (companyId) {
           await updateCompany({
             id: companyId,
-            cnpj: data.cnpj,
+            cnpj: data.cnpj.replace(/\D/g, ""),
             name: data.name,
             url: data.url,
           });
@@ -66,7 +77,7 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
         if (!companyId) {
           await createCompany({
             name: data.name,
-            cnpj: data.cnpj,
+            cnpj: data.cnpj.replace(/\D/g, ""),
             url: data.url,
           });
           toast.success("Empresa criada com sucesso!");
@@ -101,7 +112,9 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
           fullWidth
           margin="normal"
           defaultValue={company?.cnpj}
-          {...register("cnpj")}
+          {...register("cnpj", {
+            onChange: (e) => handleFormatInput(e, formatCNPJ),
+          })}
           error={!!errors.cnpj}
           helperText={errors.cnpj?.message}
         />
