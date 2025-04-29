@@ -49,30 +49,35 @@ export function CompanyForm({ companyId, onClose }: CompanyFormProps) {
     }
   }, [companyId, company, resetForm]);
 
-  const onSubmit = useCallback((data: CompanySchema) => {
-    try {
-      if (companyId) {
-        updateCompany({
-          id: companyId,
-          cnpj: data.cnpj,
-          name: data.name,
-          url: data.url,
-        });
-        toast.success("Empresa atualizada com sucesso!");
-        onClose();
-      } else {
-        createCompany({
-          name: data.name,
-          cnpj: data.cnpj,
-          url: data.url,
-        });
-        toast.success("Empresa criada com sucesso!");
-        onClose();
+  const onSubmit = useCallback(
+    async (data: CompanySchema) => {
+      try {
+        if (companyId) {
+          await updateCompany({
+            id: companyId,
+            cnpj: data.cnpj,
+            name: data.name,
+            url: data.url,
+          });
+          toast.success("Empresa atualizada com sucesso!");
+          onClose();
+        }
+
+        if (!companyId) {
+          await createCompany({
+            name: data.name,
+            cnpj: data.cnpj,
+            url: data.url,
+          });
+          toast.success("Empresa criada com sucesso!");
+          onClose();
+        }
+      } catch (err: any) {
+        toast.error(err.message);
       }
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  }, []);
+    },
+    [companyId, toast]
+  );
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>

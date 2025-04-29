@@ -41,7 +41,9 @@ export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
     try {
       await createCompany({ cnpj, name, url });
       await get().getCompanies();
-    } catch (error) {
+    } catch (error: any) {
+      set({ error: error?.response?.data?.message || "Erro desconhecido" });
+      throw new Error(error?.response?.data?.message);
     } finally {
       set({ loading: false });
     }
@@ -52,7 +54,9 @@ export const useCompaniesStore = create<CompaniesStore>((set, get) => ({
     try {
       await updateCompany({ cnpj, name, url, id });
       await get().getCompanies();
-    } catch (error) {
+    } catch (error: any) {
+      set({ error: error?.response?.data?.message || "Erro desconhecido" });
+      throw new Error(error?.response?.data?.message);
     } finally {
       set({ loading: false });
     }
