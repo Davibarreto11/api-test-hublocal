@@ -58,7 +58,7 @@ model Location {
   deletedAt    DateTime? @map("deleted_at")
 
   companyId String
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("locations")
 }
