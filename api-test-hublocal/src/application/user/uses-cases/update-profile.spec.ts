@@ -40,7 +40,7 @@ describe("Update Profile", () => {
       password: "123456",
     });
 
-    const { user: user2 } = await createUser.execute({
+    await createUser.execute({
       name: "Carlos Silva",
       email: "carlos@gmail.com",
       password: "123456",

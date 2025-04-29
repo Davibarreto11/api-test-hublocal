@@ -16,6 +16,7 @@ export class Company {
   constructor(props: CompanyProps) {
     this.props = {
       ...props,
+      deletedAt: props.deletedAt ?? null,
     };
   }
   public get count(): number | undefined {

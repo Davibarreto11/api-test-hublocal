@@ -19,6 +19,7 @@ export class Location {
   constructor(props: LocationProps) {
     this.props = {
       ...props,
+      deletedAt: props.deletedAt ?? null,
     };
   }
 

@@ -14,6 +14,7 @@ export class User {
   constructor(props: UserProps) {
     this.props = {
       ...props,
+      deletedAt: props.deletedAt ?? null,
     };
   }
 
