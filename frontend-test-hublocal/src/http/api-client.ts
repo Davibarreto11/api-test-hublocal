@@ -2,7 +2,7 @@ import axios from "axios";
 import { type CookiesFn, getCookie } from "cookies-next";
 
 const api = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: process.env.NEXT_PUBLIC_API,
   headers: {
     "Content-Type": "application/json",
   },
