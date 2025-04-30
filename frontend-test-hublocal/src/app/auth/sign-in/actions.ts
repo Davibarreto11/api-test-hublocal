@@ -1,8 +1,8 @@
 "use server";
 
 import { signInWithPassword } from "@/http/sign-in-with-password";
-import { type LoginSchema } from "./page";
 import { cookies } from "next/headers";
+import { LoginSchema } from "./schema";
 
 export async function signInWithEmailAndPassword({
   email,

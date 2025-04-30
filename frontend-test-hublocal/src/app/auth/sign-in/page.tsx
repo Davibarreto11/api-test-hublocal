@@ -10,15 +10,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "./actions";
 import { toast } from "react-toastify";
-
-export const loginSchema = z.object({
-  email: z.string().email({ message: "E-mail inválido" }),
-  password: z
-    .string()
-    .min(6, { message: "Senha deve ter no mínimo 6 caracteres" }),
-});
-
-export type LoginSchema = z.infer<typeof loginSchema>;
+import { loginSchema, LoginSchema } from "./schema";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState<boolean>(false);
