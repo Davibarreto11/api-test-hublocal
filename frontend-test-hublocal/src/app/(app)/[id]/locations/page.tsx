@@ -15,9 +15,9 @@ import {
   Pagination,
   TablePagination,
 } from "@mui/material";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, ArrowBack } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocationsStore } from "@/store/location";
 import { DeleteDialogLocation } from "@/components/delete-dialog-location";
@@ -25,6 +25,7 @@ import { AddEditDialogLocation } from "@/components/add-edit-dialog-location";
 
 export default function LocationsPage() {
   const { id } = useParams();
+  const router = useRouter();
   const { locations, loading, getLocations } = useLocationsStore();
 
   const [deleteDialog, setDeleteDialog] = useState<{
@@ -61,6 +62,19 @@ export default function LocationsPage() {
 
   return (
     <Box p={2}>
+      <Box
+        display="flex"
+        alignItems="center"
+        mb={2}
+        ml={2}
+        sx={{ cursor: "pointer" }}
+        onClick={router.back}
+      >
+        <ArrowBack fontSize="small" sx={{ mr: 1, color: "#4D4D4D" }} />
+        <Typography variant="body1" color="#4D4D4D" fontWeight={600}>
+          Minhas Empresas
+        </Typography>
+      </Box>
       {locations.length === 0 ? (
         <Box
           display="flex"

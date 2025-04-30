@@ -46,8 +46,12 @@ export default function Header({ profile }: Profile) {
     setAnchorE2(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuCloseCompanies = () => {
     setAnchorE2(null);
+  };
+
+  const handleMenuCloseProfile = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -89,7 +93,7 @@ export default function Header({ profile }: Profile) {
           <Menu
             anchorEl={anchorE2}
             open={Boolean(anchorE2)}
-            onClose={handleMenuClose}
+            onClose={handleMenuCloseCompanies}
             sx={{
               mt: 1,
               minWidth: 200,
@@ -111,7 +115,7 @@ export default function Header({ profile }: Profile) {
                   }}
                   onClick={() => {
                     getCompany(company.id);
-                    handleMenuClose();
+                    handleMenuCloseCompanies();
                   }}
                 >
                   {company.name}
@@ -139,16 +143,16 @@ export default function Header({ profile }: Profile) {
           <IconButton onClick={handleMenuOpenProfile} size="small">
             <ExpandMoreIcon />
           </IconButton>
-          {/* <Menu
-            anchorEl={anchorE1}
-            open={Boolean(anchorE1)}
-            onClose={handleMenuClose}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuCloseProfile}
           >
-            <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
+            <MenuItem onClick={handleMenuCloseProfile}>Perfil</MenuItem>
             <a href="/api/auth/sign-out">
-              <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
+              <MenuItem onClick={handleMenuCloseProfile}>Sair</MenuItem>
             </a>
-          </Menu> */}
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>
