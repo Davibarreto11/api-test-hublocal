@@ -15,6 +15,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
 import { useCompaniesStore } from "@/store/company";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import profileFoto from "@/assets/profile-foto.png";
 
 interface Profile {
   profile: {
@@ -24,6 +26,8 @@ interface Profile {
 }
 
 export default function Header({ profile }: Profile) {
+  const router = useRouter();
+
   const {
     company: companyStore,
     getCompany,
@@ -51,6 +55,7 @@ export default function Header({ profile }: Profile) {
   };
 
   const handleMenuCloseProfile = () => {
+    router.push("/profile");
     setAnchorEl(null);
   };
 
@@ -84,7 +89,14 @@ export default function Header({ profile }: Profile) {
           }}
         >
           <BusinessIcon fontSize="small" />
-          <Typography variant="h6" fontWeight="bold">
+          <Typography
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => router.push("/")}
+            variant="h6"
+            fontWeight="bold"
+          >
             {companyStore?.name || "Minhas Empresas"}
           </Typography>
           <IconButton onClick={handleMenuOpenCompanies} size="small">
@@ -136,7 +148,7 @@ export default function Header({ profile }: Profile) {
         >
           <Avatar
             alt="Usuário"
-            src="/avatar.png"
+            src={profileFoto.src}
             sx={{ width: 32, height: 32 }}
           />
           <Typography variant="body1">{profile.name}</Typography>

@@ -2,8 +2,10 @@ import { api } from "./api-client";
 
 export interface UserResponse {
   user: {
+    id: string;
     name: string;
     email: string;
+    createdAt: Date;
   };
 }
 
