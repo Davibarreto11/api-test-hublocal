@@ -9,28 +9,13 @@ import {
   Paper,
   Avatar,
 } from "@mui/material";
-import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import { useUserStore } from "@/store/user";
 import profileFoto from "@/assets/profile-foto.png";
 import { toast } from "react-toastify";
-
-export const schema = z
-  .object({
-    name: z.string().min(1, "Nome é obrigatório"),
-    email: z.string().email("E-mail inválido"),
-    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
-    passwordConfirmation: z
-      .string()
-      .min(6, "A confirmação de senha deve ter pelo menos 6 caracteres.")
-      .max(20, "A confirmação de senha não pode exceder 20 caracteres."),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "As senhas não coincidem.",
-    path: ["passwordConfirmation"],
-  });
-export type SchemaUser = z.infer<typeof schema>;
+import { schema, type SchemaUser } from "./schema";
 
 export default function ProfilePage() {
   const { getProfile, profile, updateProfile, loading } = useUserStore();
